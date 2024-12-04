@@ -5,11 +5,11 @@ import 'dart:isolate';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:fileShare/src/common/Global.dart';
-import 'package:fileShare/src/init.dart';
-import 'package:fileShare/src/multicast.dart';
-import 'package:fileShare/src/service/HttpServer.dart';
-import 'package:fileShare/src/utils/NetworkUtil.dart';
+import 'package:file_share/src/common/Global.dart';
+import 'package:file_share/src/init.dart';
+import 'package:file_share/src/multicast.dart';
+import 'package:file_share/src/service/HttpServer.dart';
+import 'package:file_share/src/utils/NetworkUtil.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'package:http/http.dart' as http;
@@ -59,7 +59,7 @@ Future<void> main() async {
       Global.localCommonFile = message['commonFile'];
       commonFilePageInit();
       //渲染页面
-      runApp(_FileShare());
+      runApp(_file_share());
       getStoragePermission();
     }
 
@@ -109,7 +109,7 @@ Future<void> uploadCommonFileName(v) async {
   }
 }
 
-class _FileShare extends StatelessWidget {
+class _file_share extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appName = '文件共享';

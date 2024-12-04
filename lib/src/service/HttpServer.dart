@@ -5,9 +5,9 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Router;
 import 'package:get/get.dart' hide Response;
-import 'package:fileShare/main.dart';
-import 'package:fileShare/src/common/Global.dart';
-import 'package:fileShare/src/commonFile.dart';
+import 'package:file_share/main.dart';
+import 'package:file_share/src/common/Global.dart';
+import 'package:file_share/src/commonFile.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
@@ -63,7 +63,7 @@ class HttpService {
                             // } else {
                             //   runPath = Directory.current.path;
                             // }
-                            var file = File("$runPath/fileShare/${el['name']}");
+                            var file = File("$runPath/file_share/${el['name']}");
                             print(file.path);
                             if (!file.existsSync()) {
 

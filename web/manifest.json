@@ -1,6 +1,6 @@
 {
-    "name": "fileShare",
-    "short_name": "fileShare",
+    "name": "file_share",
+    "short_name": "file_share",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
