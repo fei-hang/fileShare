@@ -1,7 +1,7 @@
 //主页
+import 'package:file_share/src/common/Global.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:file_share/src/common/Global.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -17,7 +17,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-
 
     return Scaffold(
       //顶部

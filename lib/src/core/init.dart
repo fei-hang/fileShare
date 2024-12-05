@@ -1,10 +1,8 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:file_share/src/common/Global.dart';
+import 'package:file_share/src/core/commonFile.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
-import 'common/Global.dart';
-import 'commonFile.dart';
 
 void commonFilePageInit() {
   Widget commonFilePage = Flexible(
@@ -52,8 +50,6 @@ class _FileFunc {
               )),
         ],
       ));
-    } else {
-      print("ERROR: not get File");
     }
   }
 }

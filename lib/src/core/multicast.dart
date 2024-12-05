@@ -102,7 +102,7 @@ class Multicast {
     }
     _isStartSend = true;
     isolate = await Isolate.spawn(
-      multicastIsoate,
+      multicastIsolate,
       _IsolateArgs(
         receivePort.sendPort,
         port,
@@ -127,7 +127,7 @@ class Multicast {
   }
 }
 
-void multicastIsoate(_IsolateArgs args) {
+void multicastIsolate(_IsolateArgs args) {
   startSendBoardcast(
     args.messages,
     args.port,
