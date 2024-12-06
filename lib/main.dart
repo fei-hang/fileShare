@@ -31,33 +31,37 @@ Future<void> main() async {
 }
 
 void multicastListener(String data, String address) {
+
   NetworkUtil().localIpv4Address.then((localAddress) {
+
+    if (data == 'begin') {
+      Global.otherDevice.removeWhere((val) => (val as String).contains(address));
+      return;
+    }
+
     var httpServiceInfo = HttpServerInfo.forMap(jsonDecode(data));
-    var ipAddress = Uri.http("$address:${httpServiceInfo.port}", '/ipAddress',
-        {"ip": "$address:${httpServiceInfo.port}"});
-    http.post(ipAddress);
+
     if (localAddress.contains(address) ||
         Global.otherDevice.contains("$address:${httpServiceInfo.port}")) {
       return;
     }
+    http.post(Uri.http("$address:${httpServiceInfo.port}", '/ipAddress',
+        {"ip": "$address:${httpServiceInfo.port}"}));
     Global.otherDevice.add("$address:${httpServiceInfo.port}");
+    uploadCommonFileName("$address:${httpServiceInfo.port}");
   });
 }
 
 void mainIsolateMessageListen(message) {
   //接收到服务器启动完成消息,启动广播发送http服务的ip:port
   if (message is HttpServerInfo) {
-    Multicast().startSendBoardcast([(jsonEncode(message.paramMap))]);
-  }
-  if (message is Map && message['commonFile'] != null) {
-    Global.localCommonFile = message['commonFile'];
-    commonFilePageInit();
-    //渲染页面
-    runApp(_FileShare());
-    // getStoragePermission();
+    Multicast().startSendBoardcast([jsonEncode(message.paramMap)]);
   }
 
   if (message is SendPort) {
+    commonFilePageInit();
+    //渲染页面
+    runApp(_FileShare());
     //监听本地共享文件
     ever(Global.localCommonFile, (mainCommonFile) {
       //通知UI线程,更新UI
@@ -76,6 +80,9 @@ void mainIsolateMessageListen(message) {
 
   if (message is Map && message['myIp'] != null) {
     Global.myIp.value = message['myIp'];
+    for (var v in Global.otherDevice) {
+      uploadCommonFileName(v);
+    }
   }
 }
 
@@ -90,7 +97,7 @@ void startHttpIsolate(ReceivePort mainReceivePort) {
       //向外发送 ip和端口
       mainSendPort.send(HttpServerInfo(
           completeServe.address.host, completeServe.port.toString()));
-      mainSendPort.send({"commonFile": Global.localCommonFile});
+
       final ReceivePort httpReceivePort = ReceivePort();
       mainSendPort.send(httpReceivePort.sendPort);
       httpReceivePort.listen((message) {

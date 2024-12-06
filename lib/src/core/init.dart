@@ -41,7 +41,7 @@ class _FileFunc {
       Global.localCommonFileName.add({"path": result.files.single.path!, "name": result.files.single.name});
       Global.localCommonFile.add(Column(
         children: [
-          const Expanded(flex: 2, child: Icon(Icons.image_aspect_ratio)),
+          const Expanded(flex: 2, child: Icon(Icons.file_upload)),
           Flexible(
               flex: 1,
               child: Text(

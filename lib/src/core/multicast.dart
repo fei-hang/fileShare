@@ -150,6 +150,7 @@ Future<void> startSendBoardcast(
   );
   _socket.broadcastEnabled = true;
   _socket.readEventsEnabled = true;
+  _socket.boardcast("begin", port);
   Timer.periodic(duration, (timer) async {
     for (String data in messages) {
       _socket.boardcast(data, port);

@@ -3,27 +3,21 @@ import 'dart:io';
 
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:file_share/src/log/Log.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart' hide Router;
-import 'package:get/get.dart' hide Response;
 import 'package:file_share/main.dart';
 import 'package:file_share/src/common/Global.dart';
 import 'package:file_share/src/core/commonFile.dart';
+import 'package:file_share/src/log/Log.dart';
+import 'package:flutter/material.dart' hide Router;
+import 'package:get/get.dart' hide Response;
+import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
-import 'package:http/http.dart' as http;
 
 class HttpService {
   Router get route {
     final router = Router();
-    router.post('/upload/<fileName>', _uploadFile);
     router.get('/byFile', _getFileByFilePath);
-    router.get(
-        '/allCommonFile',
-        (Request request) => Response(200,
-            body: "{commonFile: ${Global.localCommonFile.toJson()}}"));
     router.post('/uploadCommonFileName', _uploadCommonFileName);
     router.post('/ipAddress', _ipAddress);
     return router;
@@ -43,8 +37,13 @@ class HttpService {
     await request.readAsString(utf8).then((body) {
       Map<String, dynamic> bodyMap = json.decode(body);
       var ip = bodyMap['ip'];
+      var commonFileNameList = (json.decode(bodyMap['commonFileNameList']) as List<dynamic>);
+      if (commonFileNameList.isEmpty) {
+        Global.homeCommonFileListRow.remove(ip);
+        return Response(200, body: "接收到共享文件");
+      }
       Global.homeCommonFileListRow[ip] = _createFileCommonListView(
-          (json.decode(bodyMap['commonFileNameList']) as List<dynamic>)
+          commonFileNameList
               .map((v) => v as Map<String, dynamic>)
               .toList(),
           ip);
@@ -88,7 +87,7 @@ class HttpService {
                                   file.writeAsBytesSync(res.bodyBytes);
                                 });
                               },
-                              icon: const Icon(Icons.image_aspect_ratio))),
+                              icon: const Icon(Icons.file_download))),
                       Flexible(
                           flex: 1,
                           child: Text(
@@ -102,25 +101,6 @@ class HttpService {
             ),
           ]),
         ));
-  }
-
-  _uploadFile(Request request, String fileName) async {
-    if (request.headers['content-type'] != 'application/octet-stream') {
-      throw new Exception("我需要文件");
-    }
-    final filePath = Global.filePath
-        .replaceAll("{ip}", request.headers['x-forwarded-for'] ?? "ip")
-        .replaceAll("{fileName}", fileName);
-    final file = File(filePath);
-    if (!file.existsSync()) {
-      await file.create(recursive: true);
-    }
-    await request
-        .read()
-        .expand((data) => data)
-        .toList()
-        .then((dateList) => file.writeAsBytes(dateList, flush: true));
-    return Response.ok('yes');
   }
 
   _getFileByFilePath(Request request) {
