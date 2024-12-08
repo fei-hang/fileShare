@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:fileShare/src/common/Global.dart';
+import 'package:file_share/src/common/Global.dart';
 
 class CommonFilePage extends StatefulWidget {
 

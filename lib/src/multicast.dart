@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
 
-import 'package:fileShare/src/utils/NetworkUtil.dart';
+import 'package:file_share/src/utils/NetworkUtil.dart';
 
 //网络多播地址 多播地址：在224.0.0.0～224.0.0.255之间
 final InternetAddress _mDnsAddressIPv4 = InternetAddress('224.0.0.251', type: InternetAddressType.IPv4);
